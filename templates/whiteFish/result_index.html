@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    input {
+    font-size: large;
+}
+
+label {
+    font-size: x-large;
+}
+
+.title {
+    font-size: x-large;
+    font-weight: bolder;
+    padding-bottom: 20px;
+}
+
+.sub-title {
+    font-size: x-large;
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+.error {
+    font-size: x-large;
+    color:red;
+}
+
+table, th, td {
+  border:1px solid black;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+</style>
+<head>
+    <meta charset="utf-8">
+    <title>Result List</title>
+</head>
+<body>
+<div class="title">Result List</div>
+<div class="topnav">
+    <a href="{% url 'fire-stations' %}">Fire Stations</a>
+    <a href="{% url 'homes' %}">Homes</a>
+    <a class="active" href="{% url 'result' %}">Result</a>
+    <a href="{% url 'density-map' %}" target="_blank">Density Map</a>
+{#      <a href="#contact">Contact</a>#}
+{#      <a href="#about">About</a>#}
+</div>
+{% if error %}
+    <div class="error">
+        {{error}}
+    </div>
+{% endif %}
+{% if tasks %}
+    <div class="error">
+        {{tasks}}
+    </div>
+{% endif %}
+<div class="sub-title"> Current Result List: </div>
+<table>
+    <tr>
+        <td>File Name</td>
+        <td>Created At</td>
+        <td>Download</td>
+    </tr>
+    {% for item in items %}
+        <tr>
+            <td>
+                {{ item.file.name }}
+            </td>
+            <td>
+                {{ item.date_created }}
+            </td>
+            <td>
+                <a href="{% url 'download' item.id %}">Download</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

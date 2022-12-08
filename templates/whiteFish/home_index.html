@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    input {
+    font-size: large;
+}
+
+label {
+    font-size: x-large;
+}
+
+.title {
+    font-size: x-large;
+    font-weight: bolder;
+    padding-bottom: 20px;
+}
+
+.sub-title {
+    font-size: x-large;
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+.error {
+    font-size: large;
+    color:red;
+}
+
+.task {
+    font-size: large;
+    color: cadetblue;
+}
+
+.add-home-form {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.delete-home-form {
+    display: inline;
+}
+
+table, th, td {
+  border:1px solid black;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+</style>
+<head>
+    <meta charset="utf-8">
+    <title>Address List</title>
+</head>
+<body>
+<div class="title">Address List</div>
+<div class="topnav">
+    <a href="{% url 'fire-stations' %}">Fire Stations</a>
+    <a class="active" href="{% url 'homes' %}">Homes</a>
+    <a href="{% url 'result' %}">Result</a>
+    <a href="{% url 'density-map' %}" target="_blank">Density Map</a>
+</div>
+<form class="add-home-form" action="{% url 'add-home' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit">
+</form>
+{% if error %}
+    {% for ele in error %}
+        <div class="error">
+            {{ele.message}}
+        </div>
+    {% endfor %}
+{% endif %}
+{% if tasks %}
+    <span>A Process is currently running</span>
+{% endif %}
+{% load extras %}
+<div class="sub-title"> Current Address List: </div>
+<table>
+    <tr>
+        <td>Delete</td>
+        <td>Record ID</td>
+        <td>Address</td>
+        <td>Coordinates - Latitude</td>
+        <td>Coordinates - Longitude</td>
+    </tr>
+    {% for item in items %}
+        <tr>
+            <td>
+                <form class="delete-home-form"
+                      action="{% url 'delete-home' item.id %}"
+                      method="POST">
+                    <input type="submit" value="X">
+                {% csrf_token %}
+                </form>
+            </td>
+            <td>
+                {{ item.id|subtract:items }}
+            <td>
+                {{ item.property_location }}
+            </td>
+            <td>
+                {{ item.cords_lat }}
+            </td>
+            <td>
+                {{ item.cords_long }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
